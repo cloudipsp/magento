@@ -21,5 +21,5 @@ Ccылка для back URL : `http://yoursite/Oplata/response`
 -----
 
 
-[1]: https://github.com/oplatacom/magento/magento.png
+[1]: https://raw.githubusercontent.com/oplatacom/magento/master/magento.png
 
