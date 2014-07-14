@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Oplata_Oplata>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Oplata_Oplata>
+    </modules>
+</config>
