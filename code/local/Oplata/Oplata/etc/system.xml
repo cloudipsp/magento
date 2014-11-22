@@ -69,7 +69,7 @@
                             <currency translate="label">
                                 <label>Валюта мерчанта</label>
                                 <frontend_type>text</frontend_type>
-                                <comment>(UAH/RUB)</comment>
+                                <comment>(UAH/RUB/EUR/USD)</comment>
                                 <sort_order>6</sort_order>
                                 <show_in_default>1</show_in_default>
                                 <show_in_website>1</show_in_website>
@@ -89,7 +89,7 @@
                             <language translate="label">
                                 <label>Язык страницы Oplata</label>
                                 <frontend_type>text</frontend_type>
-                                <comment>Доступны ( UA, RU, EN )</comment>
+                                <comment>Доступны ( UA, RU, EN, LV )</comment>
                                 <sort_order>9</sort_order>
                                 <show_in_default>1</show_in_default>
                                 <show_in_website>1</show_in_website>
