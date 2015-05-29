@@ -32,7 +32,6 @@ class Oplata_Oplata_Model_Oplata extends Mage_Payment_Model_Method_Abstract
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         $checkout = Mage::getSingleton('checkout/session')->getCustomer();
         $quote = Mage::getSingleton('checkout/session')->getQuote();
-        echo $quote;
         $email = $customer->getEmail();
         $email = isset($email) ? $email : $quote->getBillingAddress()->getEmail();
         $email = isset($email) ? $email : $order->getCustomerEmail();
