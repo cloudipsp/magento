@@ -30,7 +30,9 @@ class Oplata_Oplata_Model_Oplata extends Mage_Payment_Model_Method_Abstract
         $amount = round($order->getGrandTotal() * 100, 2);
 
         $customer = Mage::getSingleton('customer/session')->getCustomer();
-
+	$checkout = Mage::getSingleton('checkout/session')->getCustomer();
+	$email = isset($customer->getEmail()) ? $customer->getEmail() : $checkout->getEmail();
+	$email = isset($email) ? $email : $myOrder->getCustomerEmail();
         $fields = array(
             'order_id' => $order_id . OplataForm::ORDER_SEPARATOR . time(),
             'merchant_id' => $this->getConfigData('merchant'),
@@ -40,7 +42,7 @@ class Oplata_Oplata_Model_Oplata extends Mage_Payment_Model_Method_Abstract
             'server_callback_url' => $this->getConfigData('back_ref'),
             'response_url' => $this->getConfigData('back_ref'),
             'lang' => $this->getConfigData('language'),
-            'sender_email' => $customer->getEmail()
+            'sender_email' => $email
         );
 
         $fields['signature'] = OplataForm::getSignature($fields, $this->getConfigData('secret_key'));
