@@ -53,7 +53,7 @@ class Oplata_Oplata_Model_Oplata extends Mage_Payment_Model_Method_Abstract
             'button' => $this->getButton(),
             'fields' => $fields,
         );
-        return $param
+        return $params;
     }
 
     function getButton()
