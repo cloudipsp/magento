@@ -2,25 +2,25 @@
 /*
  *
  * @category   Community
- * @package    Oplata_Oplata
- * @copyright  http://oplata.com
+ * @package    Fondy_Fondy
+ * @copyright  http://fondy.eu
  * @license    Open Software License (OSL 3.0)
  *
  */
 
 /*
- * Oplata payment module
+ * Fondy payment module
  *
- * @author     Oplata
+ * @author     Fondy
  *
  */
 
-class Oplata_Oplata_Block_Redirect extends Mage_Core_Block_Abstract
+class Fondy_Fondy_Block_Redirect extends Mage_Core_Block_Abstract
 {
     protected function _toHtml()
     {
-        include_once "Oplata.cls.php";
-        $oplata = Mage::getModel('Oplata/Oplata');
+        include_once "Fondy.cls.php";
+        $oplata = Mage::getModel('Fondy/Fondy');
 
         $data = $oplata->getFormFields();
 
@@ -30,8 +30,8 @@ class Oplata_Oplata_Block_Redirect extends Mage_Core_Block_Abstract
         $order = $oplata->getQuote();
         $order->setStatus($state);
         $order->save();
-
-        $html ='<form name="OplataForm" id="OplataForm" method="post" action="'.OplataForm::URL.'">';
+		//print_r($data['fields'])die;
+        $html ='<form name="FondyForm" id="FondyForm" method="post" action="'.FondyForm::URL.'">';
 
         foreach ($data['fields'] as $fieldName => $field) {
             $html .= '<input type="hidden" name="'.$fieldName.'" value="'.$field.'">';

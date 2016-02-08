@@ -1,10 +1,10 @@
 <?php
 
-class Oplata_Oplata_Model_Oplata extends Mage_Payment_Model_Method_Abstract
+class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
 {
 
-    protected $_code = 'Oplata';
-    protected $_formBlockType = 'Oplata/form';
+    protected $_code = 'Fondy';
+    protected $_formBlockType = 'Fondy/form';
 
     public function getCheckout()
     {
@@ -13,7 +13,7 @@ class Oplata_Oplata_Model_Oplata extends Mage_Payment_Model_Method_Abstract
 
     public function getOrderPlaceRedirectUrl()
     {
-        return Mage::getUrl('Oplata/redirect', array('_secure' => true));
+        return Mage::getUrl('Fondy/redirect', array('_secure' => true));
     }
 
     public function getQuote()
@@ -36,7 +36,7 @@ class Oplata_Oplata_Model_Oplata extends Mage_Payment_Model_Method_Abstract
         $email = isset($email) ? $email : $quote->getBillingAddress()->getEmail();
         $email = isset($email) ? $email : $order->getCustomerEmail();
         $fields = array(
-            'order_id' => $order_id . OplataForm::ORDER_SEPARATOR . time(),
+            'order_id' => $order_id . FondyForm::ORDER_SEPARATOR . time(),
             'merchant_id' => $this->getConfigData('merchant'),
             'order_desc' => 'Order description',
             'amount' => $amount,
@@ -47,7 +47,7 @@ class Oplata_Oplata_Model_Oplata extends Mage_Payment_Model_Method_Abstract
             'sender_email' => $email
         );
 
-        $fields['signature'] = OplataForm::getSignature($fields, $this->getConfigData('secret_key'));
+        $fields['signature'] = FondyForm::getSignature($fields, $this->getConfigData('secret_key'));
 
         $params = array(
             'button' => $this->getButton(),
@@ -63,7 +63,7 @@ class Oplata_Oplata_Model_Oplata extends Mage_Payment_Model_Method_Abstract
             "</div>" .
             "<script type=\"text/javascript\">
             setTimeout( subform, 200 );
-            function subform(){ document.getElementById('OplataForm').submit(); }
+            function subform(){ document.getElementById('FondyForm').submit(); }
             </script>";
 
         return $button;

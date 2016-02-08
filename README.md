@@ -11,13 +11,13 @@
 
 >3. Открыть вкладку "Платежные методы" ( "Payment methods" )
 
->4. Выбрать Oplata
+>4. Выбрать Fondy
 
 >5. Включить модуль и ввести все настройки 
 
 ![Скриншот][1]
 
-Ccылка для back URL : `http://yoursite/Oplata/response`
+Ccылка для back URL : `http://yoursite/Fondy/response`
 -----
 
 

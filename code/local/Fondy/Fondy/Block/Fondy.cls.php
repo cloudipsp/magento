@@ -1,5 +1,5 @@
 <?php
-class OplataForm
+class FondyForm
 {
     const ORDER_APPROVED = 'approved';
     const ORDER_DECLINED = 'declined';
@@ -8,7 +8,7 @@ class OplataForm
 
     const SIGNATURE_SEPARATOR = '|';
 
-    const URL = "https://api.oplata.com/api/checkout/redirect/";
+    const URL = "https://api.fondy.eu/api/checkout/redirect/";
 
     protected static $responseFields = array('rrn',
         'masked_card',
@@ -58,9 +58,9 @@ class OplataForm
         }
     }
 
-    public static function isPaymentValid($oplataSettings, $response)
+    public static function isPaymentValid($fondySettings, $response)
     {
-        if ($oplataSettings['merchant_id'] != $response['merchant_id']) {
+        if ($fondySettings['merchant_id'] != $response['merchant_id']) {
             Mage::throwException('An error has occurred during payment. Merchant data is incorrect.');
         }
 
@@ -75,7 +75,7 @@ class OplataForm
             }
         }
 
-        if (self::getSignature($response, $oplataSettings['secret_key']) != $originalResponse['signature']) {
+        if (self::getSignature($response, $fondySettings['secret_key']) != $originalResponse['signature']) {
             Mage::throwException('An error has occurred during payment. Signature is not valid.');
         }
 

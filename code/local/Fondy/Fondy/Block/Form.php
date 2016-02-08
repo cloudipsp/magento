@@ -15,12 +15,12 @@
  *
  */
 
-class Oplata_Oplata_Block_Form extends Mage_Payment_Block_Form
+class Fondy_Fondy_Block_Form extends Mage_Payment_Block_Form
 {
     protected function _construct()
     {
         parent::_construct();
-        $this->setTemplate('Oplata/form.phtml');
+        $this->setTemplate('Fondy/form.phtml');
 
     }
 }

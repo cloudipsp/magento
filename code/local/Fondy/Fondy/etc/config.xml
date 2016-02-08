@@ -1,73 +1,73 @@
 <?xml version="1.0"?>
     <config>
         <modules>
-           <Oplata_Oplata>
+           <Fondy_Fondy>
               <version>0.1.0</version>
-           </Oplata_Oplata>
+           </Fondy_Fondy>
         </modules>
      
         <global>
         <blocks>
-            <Oplata>
-                <class>Oplata_Oplata_Block</class>
-            </Oplata>
+            <Fondy>
+                <class>Fondy_Fondy_Block</class>
+            </Fondy>
         </blocks>
             <models>
-                <Oplata>
-                    <class>Oplata_Oplata_Model</class>
-                </Oplata>
+                <Fondy>
+                    <class>Fondy_Fondy_Model</class>
+                </Fondy>
             </models>
             <resources>
-                <Oplata_setup>
+                <Fondy_setup>
                     <setup>
-                        <module>Oplata_Oplata</module>
+                        <module>Fondy_Fondy</module>
                     </setup>
                     <connection>
                         <use>core_setup</use>
                     </connection>
-                </Oplata_setup>
-                <Oplata_write>
+                </Fondy_setup>
+                <Fondy_write>
                     <connection>
                       <use>core_write</use>
                     </connection>
-                </Oplata_write>
-                <Oplata_read>
+                </Fondy_write>
+                <Fondy_read>
                    <connection>
                     <use>core_read</use>
                   </connection>
-                </Oplata_read>
+                </Fondy_read>
             </resources>
         </global>
         
         <frontend>
         <secure_url>
-            <Oplata_redirect>/Oplata/redirect/</Oplata_redirect>
-            <Oplata_response>/Oplata/response/</Oplata_response>
+            <Fondy_redirect>/Fondy/redirect/</Fondy_redirect>
+            <Fondy_response>/Fondy/response/</Fondy_response>
         </secure_url>
 
         <routers>
-            <Oplata>
+            <Fondy>
                 <use>standard</use>
                 <args>
-                    <module>Oplata_Oplata</module>
-                    <frontName>Oplata</frontName>
+                    <module>Fondy_Fondy</module>
+                    <frontName>Fondy</frontName>
                 </args>
-            </Oplata>
+            </Fondy>
         </routers>
         
         </frontend>
         <default>
             <payment>
-                <Oplata>
+                <Fondy>
                     <active>0</active>
-                    <model>Oplata/Oplata</model>
+                    <model>Fondy/Fondy</model>
                     <order_status>pending</order_status>
                     <after_pay_status>complete</after_pay_status>
-                    <title>Pay via Oplata</title>
+                    <title>Pay via Fondy</title>
                     <currency>UAH</currency>
                     <payment_action>generateForm</payment_action>
                     <allowspecific>0</allowspecific>
-                </Oplata>
+                </Fondy>
              </payment>
         </default>
     </config>

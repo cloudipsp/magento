@@ -3,8 +3,8 @@
        <sections>
             <payment>
                 <groups>
-                    <Oplata translate="label" module="paygate">
-                        <label>Oplata( UA/RU )</label>
+                    <Fondy translate="label" module="paygate">
+                        <label>Fondy</label>
                         <sort_order>670</sort_order>
                         <show_in_default>1</show_in_default>
                         <show_in_website>1</show_in_website>
@@ -87,7 +87,7 @@
                             </back_ref>
 
                             <language translate="label">
-                                <label>Язык страницы Oplata</label>
+                                <label>Язык Fondy</label>
                                 <frontend_type>text</frontend_type>
                                 <comment>Доступны ( UA, RU, EN, LV )</comment>
                                 <sort_order>9</sort_order>
@@ -96,7 +96,7 @@
                                 <show_in_store>0</show_in_store>
                             </language>
                         </fields>
-                    </Oplata>
+                    </Fondy>
                 </groups>
             </payment>
         </sections>
