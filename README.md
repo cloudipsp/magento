@@ -21,5 +21,5 @@ Ccылка для back URL : `http://yoursite/Fondy/response`
 -----
 
 
-[1]: https://raw.githubusercontent.com/oplatacom/magento/master/magentof.png
+[1]: https://raw.githubusercontent.com/cloudipsp/magento/master/magentof.png
 
