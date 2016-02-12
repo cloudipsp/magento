@@ -21,26 +21,29 @@ class Fondy_Fondy_Block_Response extends Mage_Core_Block_Abstract
     protected function _toHtml()
     {
         include_once "Fondy.cls.php";
-        $oplata = Mage::getModel('Fondy/Fondy');
+        $fodny = Mage::getModel('Fondy/Fondy');
 
         $settings = array(
-            'merchant_id' => $oplata->getConfigData('merchant'),
-            'secret_key' => $oplata->getConfigData('secret_key')
+            'merchant_id' => $fodny->getConfigData('merchant'),
+            'secret_key' => $fodny->getConfigData('secret_key')
         );
 
         try {
             $validated = FondyForm::isPaymentValid($settings, $_POST);
             if ($validated === true) {
                 list($orderId,) = explode(FondyForm::ORDER_SEPARATOR, $_POST['order_id']);
-//		echo "<pre>";
-//		echo "Response\n";
-//       print_r($oplata->getConfigData('after_pay_status'));
-//	return var_export($_POST, true);
+
                 // Payment was successful, so update the order's state, send order email and move to the success page
                 $order = Mage::getModel('sales/order');
                 $order->loadByIncrementId($orderId);
-                $order->setState($oplata->getConfigData('after_pay_status'), false, 'Gateway has authorized the payment.');
-
+				if ($fodny->getConfigData('after_pay_status') == Mage_Sales_Model_Order::STATE_PROCESSING){
+					$order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment.');
+				}elseif($fodny->getConfigData('after_pay_status') == Mage_Sales_Model_Order::STATE_HOLDED){
+					$order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment.');
+				}
+				else{
+					$order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true, 'Gateway has authorized the payment.');
+				}
                 $order->sendNewOrderEmail();
                 $order->setEmailSent(true);
 
