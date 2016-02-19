@@ -1,19 +1,19 @@
 <?php
 
-class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
+class Fondy_FondyOnPage_Model_FondyOnPage extends Mage_Payment_Model_Method_Abstract
 {
 
-    protected $_code = 'Fondy';
-    protected $_formBlockType = 'Fondy/form';
+    protected $_code = 'FondyOnPage';
+    protected $_formBlockType = 'FondyOnPage/form';
 
     public function getCheckout()
     {
         return Mage::getSingleton('checkout/session');
     }
-
+ 
     public function getOrderPlaceRedirectUrl()
     {
-        return Mage::getUrl('Fondy/redirect', array('_secure' => true));
+        return Mage::getUrl('FondyOnPage/checkout', array('_secure' => true));
     }
 
     public function getQuote()
@@ -24,10 +24,10 @@ class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
     }
 
     public function getFormFields()
-    {
+    {   include_once "Fondy.cls.php";
         $order_id = $this->getCheckout()->getLastRealOrderId();
         $order = Mage::getModel('sales/order')->loadByIncrementId($order_id);
-        $amount = round($order->getGrandTotal() * 100, 2);
+        $amount = round($order->getGrandTotal(), 2);
 
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         $checkout = Mage::getSingleton('checkout/session')->getCustomer();
@@ -35,14 +35,15 @@ class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
         $email = $customer->getEmail();
         $email = isset($email) ? $email : $quote->getBillingAddress()->getEmail();
         $email = isset($email) ? $email : $order->getCustomerEmail();
+        $back = Mage::getUrl('FondyOnPage/response', array('_secure' => true));
         $fields = array(
             'order_id' => $order_id . FondyForm::ORDER_SEPARATOR . time(),
             'merchant_id' => $this->getConfigData('merchant'),
-            'order_desc' => 'Order number'.$order_id,
+            'order_desc' => 'Order pay'.$order_id,
             'amount' => $amount,
             'currency' => $this->getConfigData('currency'),
-            'server_callback_url' => $this->getConfigData('back_ref'),
-            'response_url' => $this->getConfigData('back_ref'),
+            'server_callback_url' => $back,
+            'response_url' => $back,
             'lang' => $this->getConfigData('language'),
             'sender_email' => $email
         );
@@ -50,24 +51,12 @@ class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
         $fields['signature'] = FondyForm::getSignature($fields, $this->getConfigData('secret_key'));
 
         $params = array(
-            'button' => $this->getButton(),
-            'fields' => $fields,
+
+            'fields' => $fields
         );
         return $params;
     }
 
-    function getButton()
-    {
-        $button = "<div style='position:absolute; top:50%; left:50%; margin:-40px 0px 0px -60px; '>" .
-            #"<div><img src='http://www.payu.ua/sites/default/files/logo-payu.png' width='120px' style='margin:5px 5px;'></div>".
-            "</div>" .
-            "<script type=\"text/javascript\">
-            setTimeout( subform, 200 );
-            function subform(){ document.getElementById('FondyForm').submit(); }
-            </script>";
-
-        return $button;
-    }
 
 }
 

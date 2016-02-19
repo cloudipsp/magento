@@ -1,0 +1,225 @@
+<?php
+$order = new Mage_Sales_Model_Order();
+$orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+$order->loadByIncrementId($orderId);
+$oplata = Mage::getModel('FondyOnPage/FondyOnPage');
+
+$data = $oplata->getFormFields();
+//print_r($data[fields]);
+?><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+
+<script src="https://api.fondy.eu/static_common/v1/checkout/ipsp.js"></script>
+
+<style>
+    .col3-layout .col-wrapper .col-main {
+         width: 100%;
+    }
+ #checkout_message{
+     font-size: 14px;
+     color: red;
+ }
+    #checkout_mess {
+        font-size: 25px;
+        color: red;
+        text-align: center;
+    }
+    #checkout_button{
+        width: 200px;
+        float: right;
+        padding:25px;
+        text-align:center;
+        cursor:pointer;
+        background: #f8931c;
+        color:#fff;
+    &:hover{
+         background-color:red;
+     }
+    }
+    #checkout_button_cancel{
+        margin-right: 10px;
+        width: 200px;
+        float: right;
+        padding:25px;
+        text-align:center;
+        cursor:pointer;
+        background: silver;
+        color:#fff;
+    &:hover{
+         background-color:white;
+     }
+    }
+    #checkout_wrapper {
+        text-align: left;
+        position: relative;
+        background: #FFF;
+        /* padding: 30px; */
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-bottom: 30px;
+        width: 100%;
+        height: auto;
+        max-width: 2000px;
+        margin: 9px auto;
+    }
+</style>
+<div id="checkout">
+    <div id="checkout_mess">ШИНСЕРВИС оплата заказа <?php echo $orderId?></div>
+    <div id="checkout_wrapper">
+    </div>
+    <div id="checkout_message">Описание платежа ШИНСЕРВИС оплата заказа <?php echo $orderId?></div>
+    <div id="checkout_message">Валюта: <?php echo $data[fields][currency]?></div>
+</div>
+
+<script>
+    var checkoutStyles = {
+        "html , body" : {
+            "overflow" : "hidden"
+        },
+    ".pages-checkout .page-section-overview .order-amount .txt-amount" : {
+            "font-size" : "14px"
+        },
+  ".pages-checkout .page-section-overview .order-currency" : {
+            "font-size" : "85%"
+        },
+
+        ".page-pne .infobox" :{
+            "border" : "solid #c03030 1px"
+        },
+
+        ".pages-checkout .page-section-content" : {
+            "background" : "#FFFFFF"
+        },
+        ".pages-checkout .page-section-tabs .nav-tabs li.active > a" : {
+            "background" : "#F1F1F1"
+        },
+        ".pages-checkout .page-section-overview" : {
+            "background" : "white",
+            "color" : "black"
+
+        },
+        ".pages-checkout .page-section-shopinfo" : {
+            "background" : "white",
+            "display":"none"
+
+        },
+        ".pages-checkout .page-section-tabs" : {
+            "background" : "#f0f0f0",
+            "display":"none"
+
+        },
+        "div.page-pne .infobox" : {
+            "float" : "right",
+            "width" : "230px"
+        },
+        ".row .row-amount" : {
+            "color" : "black"
+
+        },
+        ".pages-checkout .page-section-overvie .row-group .row .row-extra" : {
+            'position': 'absolute',
+            'top': '240px',
+             'left': '25px',
+            'z-index': '9999999'
+
+        },
+        ".pages-checkout" : {
+            "color" : "#FFFFFF!important"
+
+        },
+        ".card.card-back" : {
+            "top" : "-220px"
+        },
+        '#submit_button_row' : {
+            'display': 'none'
+        },
+        ".btn-block" : {
+            "background" : "#c03030",
+            "padding" : "0"
+        }
+    };
+    function __DEFAULTCALLBACK__(data,type){
+        var form;
+        console.log('action',data.action);
+        console.log('url',data.url);
+        for(var prop in data.send_data){
+            if(data.send_data.hasOwnProperty(prop)){
+                console.log(prop,data.send_data[prop]);
+            }
+        }
+        if ( data.error){
+            console.log(data,data.error);
+            return;
+        }
+        if (data.action == 'redirect') {
+            this.loadUrl(data.url);
+            return;
+        }
+        if (data.send_data.order_status == 'delayed') {
+            this.unbind('ready');
+            this.hide();
+            return;
+        } else {
+            this.unbind('ready').action('ready', function() {
+                this.show();
+            });
+        }
+        if( data.send_data && data.url ){
+            form = prepareFormData(data.url,data.send_data);
+            this.find('body').appendChild(form);
+            form.submit();
+            form.parentNode.removeChild(form);
+        }
+    }
+    function checkoutInit(url, val) {
+        $ipsp("checkout").scope(function() {
+            this.setCheckoutWrapper("#checkout_wrapper");
+            this.setModal(false);
+            this.setCssStyle(checkoutStyles);
+            this.width("100%");
+
+            this.addCallback(__DEFAULTCALLBACK__);
+            this.action("show", function(data) {
+                $("#checkout_loader").remove();
+                $("#checkout").show();
+            });
+            this.action("hide", function(data) {
+                $("#checkout").hide();
+            });
+            if(val){
+                this.width(val);
+                this.action("resize", function(data) {
+                    $("#checkout_wrapper").width(val).height(data.height);
+                });
+            }else{
+                this.action("resize", function(data) {
+                    $("#checkout_wrapper").height(data.height+15);
+                });
+            }
+            this.loadUrl(url);
+        });
+    };
+    var button = $ipsp.get("button");
+    button.setMerchantId(<?php echo $data[fields][merchant_id]?>);
+    button.setAmount(<?php echo $data[fields][amount]?>, "<?php echo $data[fields][currency]?>", true);
+    button.setHost("api.fondy.eu");
+    button.addParam("order_desc","<?php echo $data[fields][order_desc]?>");
+    button.addParam("order_id","<?php echo $data[fields][order_id]?>");
+    button.addParam("lang","<?php echo $data[fields][lang]?>");//button.addParam("delayed","N");
+    button.addParam("server_callback_url","<?php echo $data[fields][response_url]?>");
+    button.addParam("signature","<?php echo $data[fields][signature]?>");
+    button.addParam("sender_email","<?php echo $data[fields][sender_email]?>");
+    button.addField({
+        label:'Имя и фамилия владельца карты',
+        name:'username',
+        value:'',
+        required:true,
+
+        valid:{
+            'pattern':'^[a-zA-Zа-яА-Я\s]+$'
+        }
+    });
+    button.setResponseUrl("<?php echo $data[fields][response_url]?>");
+    checkoutInit(button.getUrl());
+</script>
+<div id="checkout_button" onclick="$ipsp('checkout').send('submit')">Оплатить</div>
+<div id="checkout_button_cancel" onclick="document.location.href = '<?php echo Mage::getUrl('', array('_secure' => true))?>';">Отменить</div>

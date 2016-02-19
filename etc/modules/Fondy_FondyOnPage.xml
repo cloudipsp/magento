@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Fondy_FondyOnPage>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Paygate/>
+                <Mage_Sales/>
+                <Mage_Checkout/>
+            </depends>
+        </Fondy_FondyOnPage>
+    </modules>
+</config>
