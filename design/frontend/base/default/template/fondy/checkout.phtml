@@ -3,9 +3,8 @@ $order = new Mage_Sales_Model_Order();
 $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
 $order->loadByIncrementId($orderId);
 $oplata = Mage::getModel('FondyOnPage/FondyOnPage');
-
 $data = $oplata->getFormFields();
-//print_r($data[fields]);
+
 ?><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 
 <script src="https://api.fondy.eu/static_common/v1/checkout/ipsp.js"></script>
@@ -63,15 +62,14 @@ $data = $oplata->getFormFields();
     }
 </style>
 <div id="checkout">
-    <div id="checkout_mess">ШИНСЕРВИС оплата заказа <?php echo $orderId?></div>
+
     <div id="checkout_wrapper">
     </div>
-    <div id="checkout_message">Описание платежа ШИНСЕРВИС оплата заказа <?php echo $orderId?></div>
-    <div id="checkout_message">Валюта: <?php echo $data[fields][currency]?></div>
 </div>
 
 <script>
     var checkoutStyles = {
+
         "html , body" : {
             "overflow" : "hidden"
         },
@@ -107,10 +105,7 @@ $data = $oplata->getFormFields();
             "display":"none"
 
         },
-        "div.page-pne .infobox" : {
-            "float" : "right",
-            "width" : "230px"
-        },
+
         ".row .row-amount" : {
             "color" : "black"
 
@@ -135,7 +130,8 @@ $data = $oplata->getFormFields();
         ".btn-block" : {
             "background" : "#c03030",
             "padding" : "0"
-        }
+        },
+        <?php echo $data[fields][styles]?>
     };
     function __DEFAULTCALLBACK__(data,type){
         var form;
@@ -208,17 +204,13 @@ $data = $oplata->getFormFields();
     button.addParam("server_callback_url","<?php echo $data[fields][response_url]?>");
     button.addParam("signature","<?php echo $data[fields][signature]?>");
     button.addParam("sender_email","<?php echo $data[fields][sender_email]?>");
-    button.addField({
-        label:'Имя и фамилия владельца карты',
-        name:'username',
-        value:'',
-        required:true,
-
-        valid:{
-            'pattern':'^[a-zA-Zа-яА-Я\s]+$'
-        }
-    });
     button.setResponseUrl("<?php echo $data[fields][response_url]?>");
+    button.addField({
+        label: 'Описание покупки',
+        name: 'order_desc',
+        value: 'Оплата заказа № <?php echo $orderId?>',
+        readonly:true
+    });
     checkoutInit(button.getUrl());
 </script>
 <div id="checkout_button" onclick="$ipsp('checkout').send('submit')">Оплатить</div>

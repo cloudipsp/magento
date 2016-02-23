@@ -45,6 +45,7 @@ class Fondy_FondyOnPage_Model_FondyOnPage extends Mage_Payment_Model_Method_Abst
             'server_callback_url' => $back,
             'response_url' => $back,
             'lang' => $this->getConfigData('language'),
+            'styles'=> $this->getConfigData('styles'),
             'sender_email' => $email
         );
 
