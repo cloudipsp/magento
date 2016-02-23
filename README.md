@@ -18,7 +18,7 @@
 >Важно! доступные статусы после оплаты Processing, On Hold 
 
 
-![Скриншот][1]
+
 
 Ccылка для back URL : `http://yoursite/Fondy/response`
 -----
@@ -26,8 +26,9 @@ Ccылка для back URL : `http://yoursite/Fondy/response`
 Пример настроек для Fondy on Page:
 
 [1]: https://raw.githubusercontent.com/cloudipsp/magento/master/magentof.png
+![Скриншот][1]
 
 Пример настроек для Fondy:
 
-[1]: https://raw.githubusercontent.com/cloudipsp/magento/master/magentor.png
-
+[2]: https://raw.githubusercontent.com/cloudipsp/magento/master/magentor.png
+![Скриншот][2]
