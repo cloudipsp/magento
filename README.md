@@ -23,6 +23,11 @@
 Ccылка для back URL : `http://yoursite/Fondy/response`
 -----
 
+Пример настроек для Fondy on Page:
 
 [1]: https://raw.githubusercontent.com/cloudipsp/magento/master/magentof.png
+
+Пример настроек для Fondy:
+
+[1]: https://raw.githubusercontent.com/cloudipsp/magento/master/magentor.png
 
