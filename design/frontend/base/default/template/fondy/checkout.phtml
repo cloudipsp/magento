@@ -208,10 +208,11 @@ $data = $oplata->getFormFields();
     button.addField({
         label: 'Описание покупки',
         name: 'order_desc',
-        value: 'Оплата заказа № <?php echo $orderId?>',
+        value: '<?php echo $this->__('Order pay');?> № <?php echo $orderId?>',
         readonly:true
     });
     checkoutInit(button.getUrl());
 </script>
-<div id="checkout_button" onclick="$ipsp('checkout').send('submit')">Оплатить</div>
-<div id="checkout_button_cancel" onclick="document.location.href = '<?php echo Mage::getUrl('', array('_secure' => true))?>';">Отменить</div>
+
+<div id="checkout_button" onclick="$ipsp('checkout').send('submit')"><?php echo $this->__('Pay');?></div>
+<div id="checkout_button_cancel" onclick="document.location.href = '<?php echo Mage::getUrl('', array('_secure' => true))?>';"><?php echo $this->__('Back');?></div>

@@ -38,15 +38,23 @@
                 </FondyOnPage_read>
             </resources>
         </global>
-
+    <translate>
+        <modules>
+            <Fondy_FondyOnPage>
+                <files>
+                    <default>Fondy_Fondy.csv</default>
+                </files>
+            </Fondy_FondyOnPage>
+        </modules>
+    </translate>
         <frontend>
             <translate>
                 <modules>
-                    <FondyOnPage>
+                    <Fondy_FondyOnPage>
                         <files>
-                            <default>Mage_Fondy.csv</default>
+                            <default>Fondy_Fondy.csv</default>
                         </files>
-                    </FondyOnPage>
+                    </Fondy_FondyOnPage>
                 </modules>
             </translate>
         <secure_url>
@@ -65,6 +73,17 @@
         </routers>
         
         </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Fondy_FondyOnPage>
+                    <files>
+                        <default>Fondy_Fondy.csv</default>
+                    </files>
+                </Fondy_FondyOnPage>
+            </modules>
+        </translate>
+    </adminhtml>
         <default>
             <payment>
                 <FondyOnPage>
