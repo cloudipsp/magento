@@ -36,7 +36,7 @@ class FondyForm
 		$responseSignature = $response['signature'];
         unset($response['response_signature_string']);
 		unset($response['signature']);
-		if (self::getSignature($response, $oplataSettings['secret_key']) != $responseSignature) {
+		if (FondyForm::getSignature($response, $oplataSettings['secret_key']) != $responseSignature) {
             return 'An error has occurred during payment. Signature is not valid.';
         }
         return true;
