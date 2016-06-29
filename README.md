@@ -1,4 +1,4 @@
-Модуль для Magento 1.9
+Module for Magento 1.9
 =====
 
 Установка
