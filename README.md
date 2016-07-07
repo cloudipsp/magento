@@ -1,34 +1,34 @@
-Модуль для Magento 1.9
+Module for Magento 1.9
 =====
 
-Установка
+Installation
 ----
-Содержимое скопировать в папку `{корень сайта}/app/`
+Copy all files to `{site root directory}/app/`
 
->1. Зайти в админку
+>1. Login to admin interface
 
->2. Перейти в раздел "Система" -> "Конфигурация" ( "System" -> "Configuration" )
+>2. Navigate to menu "System" -> "Configuration" 
 
->3. Открыть вкладку "Платежные методы" ( "Payment methods" )
+>3. Open tab "Payment methods"
 
->4. Выбрать Fondy или Fondy on Page
+>4. Choose Fondy or Fondy on Page
 
->5. Включить модуль и ввести все настройки 
+>5. Enable module
 
->Важно! доступные статусы после оплаты Processing, On Hold 
-
-
+>N.B.! Available statuses after order completion are Processing, On Hold 
 
 
-Ccылка для back URL : `http://yoursite/Fondy/response`
+
+
+Callback URL : `http://yoursite/Fondy/response`
 -----
 
-Пример настроек для Fondy on Page:
+Example of "Fondy on Page" settings:
 
 [1]: https://raw.githubusercontent.com/cloudipsp/magento/master/magentof.png
 ![Скриншот][1]
 
-Пример настроек для Fondy:
+Example of "Fondy" settings:
 
 [2]: https://raw.githubusercontent.com/cloudipsp/magento/master/magentor.png
 ![Скриншот][2]
