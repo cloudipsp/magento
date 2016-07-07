@@ -32,8 +32,8 @@ class FondyForm
         if ($response['order_status'] == FondyForm::ORDER_DECLINED) {
             Mage::throwException('An error has occurred during payment. Order is declined.');
         }
-
-        $originalResponse = $response;
+		
+		$responseSignature = $response['signature'];
 		if (isset($response['response_signature_string'])){
 			unset($response['response_signature_string']);
 		}
