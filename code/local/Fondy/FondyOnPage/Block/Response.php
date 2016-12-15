@@ -6,12 +6,6 @@ class Fondy_FondyOnPage_Block_Response extends Mage_Core_Block_Abstract
     protected function _toHtml()
     {
 
-       // echo "<pre>";
-      //  echo "Response\n";
-      //  print_r($_POST);die;
-      //  return var_export($_POST, true);
-
-
         include_once "Fondy.cls.php";
         $fodny = Mage::getModel('FondyOnPage/FondyOnPage');
 
