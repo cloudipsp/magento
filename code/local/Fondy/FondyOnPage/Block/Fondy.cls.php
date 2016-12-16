@@ -26,6 +26,9 @@ class FondyForm
     }
     public static function isPaymentValid($oplataSettings, $response)
     {
+		$responseSignature = $response['signature'];
+		$data = $response['data'];
+		$response = json_decode(base64_decode($response['data']),TRUE)['order'];
 
         if ($oplataSettings['merchant_id'] != $response['merchant_id']) {
             return 'An error has occurred during payment. Merchant data is incorrect.';
@@ -36,15 +39,9 @@ class FondyForm
 		if ($response['order_status'] != FondyForm::ORDER_APPROVED) {
             Mage::throwException('An error has occurred during payment. Order is not approv.');
         }
-			$responseSignature = $response['signature'];
-		if (isset($response['response_signature_string'])){
-			unset($response['response_signature_string']);
-		}
-		if (isset($response['signature'])){
-			unset($response['signature']);
-		}
-		if (self::getSignature($response, $oplataSettings['secret_key']) != $responseSignature) {
-            Mage::throwException('An error has occurred during payment. Signature is not valid.');
+		if ($responseSignature != sha1($oplataSettings['secret_key'] .'|'. $data)) {
+            return 'An error has occurred during payment. Signature is not valid.';
+        }
         return true;
     }
 

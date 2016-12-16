@@ -111,6 +111,9 @@ $data = $oplata->getFormFields();
             "color" : "black"
 
         },
+		".row.row-desc" :{
+			"display" : "none!important"
+			},
         ".pages-checkout .page-section-overvie .row-group .row .row-extra" : {
             'position': 'absolute',
             'top': '240px',
@@ -132,7 +135,7 @@ $data = $oplata->getFormFields();
             "background" : "#c03030",
             "padding" : "0"
         },
-        <?php echo $data[fields][styles]?>
+        <?php echo $data[styles]?>
     };
     function __DEFAULTCALLBACK__(data,type){
         var form;
@@ -195,24 +198,7 @@ $data = $oplata->getFormFields();
             this.loadUrl(url);
         });
     };
-    var button = $ipsp.get("button");
-    button.setMerchantId(<?php echo $data[fields][merchant_id]?>);
-    button.setAmount(<?php echo $data[fields][amount]?>, "<?php echo $data[fields][currency]?>", true);
-    button.setHost("api.fondy.eu");
-    button.addParam("order_desc","<?php echo $data[fields][order_desc]?>");
-    button.addParam("order_id","<?php echo $data[fields][order_id]?>");
-    button.addParam("lang","<?php echo $data[fields][lang]?>");//button.addParam("delayed","N");
-    button.addParam("server_callback_url","<?php echo $data[fields][response_url]?>");
-    button.addParam("signature","<?php echo $data[fields][signature]?>");
-    button.addParam("sender_email","<?php echo $data[fields][sender_email]?>");
-    button.setResponseUrl("<?php echo $data[fields][response_url]?>");
-    button.addField({
-        label: 'Описание покупки',
-        name: 'order_desc',
-        value: '<?php echo $this->__('Order pay');?> № <?php echo $orderId?>',
-        readonly:true
-    });
-    checkoutInit(button.getUrl());
+    checkoutInit("<?php echo $data[url]?>");
 </script>
 
 <div id="checkout_button" onclick="$ipsp('checkout').send('submit')"><?php echo $this->__('Pay');?></div>

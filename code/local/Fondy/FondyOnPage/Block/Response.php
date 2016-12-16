@@ -16,11 +16,12 @@ class Fondy_FondyOnPage_Block_Response extends Mage_Core_Block_Abstract
 
         try {
             $validated = FondyForm::isPaymentValid($settings, $_POST);
-
+	
             if ($validated === true) {
-            //if ($_POST[])
 
-                list($orderId,) = explode(FondyForm::ORDER_SEPARATOR, $_POST['order_id']);
+				$oid = json_decode(base64_decode( $_POST['data']),TRUE)['order']['order_id'];
+				
+                list($orderId,) = explode(FondyForm::ORDER_SEPARATOR, $oid);
 
                 // Payment was successful, so update the order's state, send order email and move to the success page
                 $order = Mage::getModel('sales/order');
