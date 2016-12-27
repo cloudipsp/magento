@@ -20,19 +20,19 @@ class Fondy_FondyOnPage_Block_Response extends Mage_Core_Block_Abstract
             if ($validated === true) {
 
 				$oid = json_decode(base64_decode( $_POST['data']),TRUE)['order']['order_id'];
-				
+				$payment = json_decode(base64_decode( $_POST['data']),TRUE)['order'];
                 list($orderId,) = explode(FondyForm::ORDER_SEPARATOR, $oid);
 
                 // Payment was successful, so update the order's state, send order email and move to the success page
                 $order = Mage::getModel('sales/order');
                 $order->loadByIncrementId($orderId);
                 if ($fodny->getConfigData('after_pay_status') == Mage_Sales_Model_Order::STATE_PROCESSING){
-                    $order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment.');
+                    $order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment.' .  ' order ID = ' . $payment['order_id']);
                 }elseif($fodny->getConfigData('after_pay_status') == Mage_Sales_Model_Order::STATE_HOLDED){
-                    $order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment.');
+                    $order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment.' . ' order ID = ' . $payment['order_id']);
                 }
                 else{
-                    $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true, 'Gateway has authorized the payment.');
+                    $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true, 'Gateway has authorized the payment.' . ' order ID = ' . $payment['order_id']);
                 }
 
                 $order->sendNewOrderEmail();
@@ -46,7 +46,7 @@ class Fondy_FondyOnPage_Block_Response extends Mage_Core_Block_Abstract
                 Mage::app()->getFrontController()->getResponse()->setRedirect($url);
             } else {
                 // case all is valid but order is not approved
-                $url = Mage::getUrl('checkout/onepage/success', array('_secure' => true));
+                $url = Mage::getUrl('checkout/onepage/error', array('_secure' => true));
                 Mage::app()->getFrontController()->getResponse()->setRedirect($url);
             }
         } catch (Exception $e) {

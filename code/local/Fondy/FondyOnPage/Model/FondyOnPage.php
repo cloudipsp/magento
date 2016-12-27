@@ -40,7 +40,7 @@ class Fondy_FondyOnPage_Model_FondyOnPage extends Mage_Payment_Model_Method_Abst
         $data = array(				
             'order_id' => $order_id .'#'. time(),
             'merchant_id' => $this->getConfigData('merchant'),
-            'order_desc' => 'Оплата заказа' . $order_id,
+            'order_desc' => 'Оплата заказа: ' . $order_id,
             'amount' => round($amount*100),
             'currency' => $this->getConfigData('currency'),
             'server_callback_url' => $back,
@@ -57,12 +57,21 @@ class Fondy_FondyOnPage_Model_FondyOnPage extends Mage_Payment_Model_Method_Abst
 				if (empty($merchant))
 					$merchant = $this->getConfigData('merchant');
 				$new_price = round($price * 100 * $i->getQtyOrdered()); //product price * pruduct quantity
-				$data['receiver'][] = array(
-				"requisites" => array(
-							"amount" => $new_price,
-							"merchant_id" => $merchant
-								),
-				"type" => "merchant");
+				if ($order->getTotalItemCount() > 1){
+					$data['receiver'][] = [
+					"requisites" => array(
+								"amount" => $new_price,
+								"merchant_id" => $merchant
+									),
+					"type" => "merchant"];
+				}elseif($order->getTotalItemCount() == 1){
+					$data['receiver'] = [
+						"requisites" => array(
+									"amount" => $new_price,
+									"merchant_id" => $merchant
+										),
+						"type" => "merchant"];				
+				}
 		}
 				/*$data['receiver'][] = array(
 				"requisites" => array(
@@ -76,7 +85,7 @@ class Fondy_FondyOnPage_Model_FondyOnPage extends Mage_Payment_Model_Method_Abst
 					 "merchant_id" =>  600001
 					 ),
 				"type" => "merchant");*/
-		//print_r ($data);die;
+
 		$fields = [
 		"version" => "2.0",
 		"data" => base64_encode(json_encode(array('order' => $data))),
@@ -92,9 +101,12 @@ class Fondy_FondyOnPage_Model_FondyOnPage extends Mage_Payment_Model_Method_Abst
 		$result = curl_exec($ch);
 		$out = json_decode($result,TRUE);
 		$url = base64_decode($out['response']['data']);
+		
+	
 		if (empty($url)){
-			Mage::throwException('An error has occurred');
+			Mage::throwException('An error has occurred request. ' . $out['response']['error_message'] . '. Request id: ' . $out['response']['request_id']);
 		}
+		
         $params = array(
             'url' => json_decode($url,TRUE)['order']['checkout_url'],
 			'styles'=> $this->getConfigData('styles'),
