@@ -13,7 +13,15 @@ class Fondy_FondyOnPage_Block_Response extends Mage_Core_Block_Abstract
             'merchant_id' => $fodny->getConfigData('merchant'),
             'secret_key' => $fodny->getConfigData('secret_key')
         );
-
+		
+		if (empty($_POST)) {
+                $callback = json_decode(file_get_contents("php://input"));
+                $_POST = array();
+                foreach ($callback as $key => $val) {
+                    $_POST[$key] = $val;
+                }
+        }
+		
         try {
             $validated = FondyForm::isPaymentValid($settings, $_POST);
 
