@@ -45,8 +45,8 @@ class FondyForm
 		}
 		if (self::getSignature($response, $oplataSettings['secret_key']) != $responseSignature) {
             Mage::throwException('An error has occurred during payment. Signature is not valid.');
-        return true;
-    }
+        }
+		return true;
 
 
 }
