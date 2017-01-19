@@ -29,7 +29,10 @@
  */
 ?>
 <ul id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none">
-    <li>
-    <?php echo $this->__('You will be required to enter your payment details before you place an order.') ?>
+   
+	<li>
+	<?php echo $this->__('You will be required to enter your payment details before you place an order. We accept: ') ?>	   
     </li>
+	<img style="float:left;" width="43px" height="33px" src="https://fondy.eu/wp-content/themes/Fondy_EU/img/mastercard.svg" alt="mastercard">
+	<img width="43px" height="33px" src="https://fondy.eu/wp-content/themes/Fondy_EU/img/visa.svg" alt="mastercard"> 
 </ul>
