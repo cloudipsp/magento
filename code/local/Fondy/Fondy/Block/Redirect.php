@@ -30,7 +30,7 @@ class Fondy_Fondy_Block_Redirect extends Mage_Core_Block_Abstract
         $order = $oplata->getQuote();
         $order->setStatus($state);
         $order->save();
-		//print_r($data['fields'])die;
+		
         $html ='<form name="FondyForm" id="FondyForm" method="post" action="'.FondyForm::URL.'">';
 
         foreach ($data['fields'] as $fieldName => $field) {
