@@ -39,7 +39,7 @@ class Fondy_FondyOnPage_Model_FondyOnPage extends Mage_Payment_Model_Method_Abst
         $fields = array(
             'order_id' => $order_id . FondyForm::ORDER_SEPARATOR . time(),
             'merchant_id' => $this->getConfigData('merchant'),
-            'order_desc' => 'Order pay'.$order_id,
+            'order_desc' => Mage::helper('sales')->__('Order #').$order_id,
             'amount' => $amount,
             'currency' => $this->getConfigData('currency'),
             'server_callback_url' => $back,
