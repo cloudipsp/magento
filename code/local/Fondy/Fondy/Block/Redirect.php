@@ -21,26 +21,11 @@ class Fondy_Fondy_Block_Redirect extends Mage_Core_Block_Abstract
     {
         include_once "Fondy.cls.php";
         $oplata = Mage::getModel('Fondy/Fondy');
-
         $data = $oplata->getFormFields();
-
-
-        $state = $oplata->getConfigData('order_status');
-
+        $state = $oplata->getConfigData('order_status');		
         $order = $oplata->getQuote();
         $order->setStatus($state);
         $order->save();
-		//print_r($data['fields'])die;
-        $html ='<form name="FondyForm" id="FondyForm" method="post" action="'.FondyForm::URL.'">';
-
-        foreach ($data['fields'] as $fieldName => $field) {
-            $html .= '<input type="hidden" name="'.$fieldName.'" value="'.$field.'">';
-        }
-
-        $html .= $data['button'];
-
-        $html .= '</form>';
-
-        return $html;
+		Mage::app()->getResponse()->setRedirect($data['url']);
     }
 }
