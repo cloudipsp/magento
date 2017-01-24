@@ -27,7 +27,7 @@ class FondyForm
     public static function isPaymentValid($oplataSettings, $response)
     {
         if ($oplataSettings['merchant_id'] != $response['merchant_id']) {
-            return 'An error has occurred during payment. Merchant data is incorrect.';
+            Mage::throwException('An error has occurred during payment. Merchant data is incorrect.');
         }
         if ($response['order_status'] == FondyForm::ORDER_DECLINED) {
             Mage::throwException('An error has occurred during payment. Order is declined.');
