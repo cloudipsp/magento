@@ -99,9 +99,6 @@ $data = $oplata->getFormFields();
             "color" : "#FFFFFF!important"
 
         },
-        '#submit_button_row' : {
-            'display': 'none'
-        },
         ".btn-block" : {
             "background" : "#c03030",
             "padding" : "0"
@@ -131,6 +128,4 @@ $data = $oplata->getFormFields();
     checkoutInit("<?php echo $data[url]?>");
 </script>
 <div id="checkout_buttons">
-<div id="checkout_button" onclick="$ipsp('checkout').send('submit')"><?php echo $this->__('Pay');?></div>
-<div id="checkout_button_cancel" onclick="document.location.href = '<?php echo Mage::getUrl('', array('_secure' => true))?>';"><?php echo $this->__('Back');?></div>
 </div>

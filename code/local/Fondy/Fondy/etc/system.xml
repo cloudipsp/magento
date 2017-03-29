@@ -55,7 +55,15 @@
                                 <show_in_website>1</show_in_website>
                                 <show_in_store>0</show_in_store>
                             </merchant>
-
+                            <merchant_second translate="label">
+                                <label>Not the main merchant ID</label>
+                                <frontend_type>text</frontend_type>
+                                <comment>Not the main merchant ID</comment>
+                                <sort_order>5</sort_order>
+                                <show_in_default>1</show_in_default>
+                                <show_in_website>1</show_in_website>
+                                <show_in_store>0</show_in_store>
+                            </merchant_second>
                             <secret_key translate="label">
                                 <label>Secret key</label>
                                 <frontend_type>text</frontend_type>
@@ -67,7 +75,7 @@
                             </secret_key>
 
                             <currency translate="label">
-                                <label>Currency</label>
+                                <label>Default currency</label>
                                 <frontend_type>text</frontend_type>
                                 <comment>(UAH/RUB/EUR/USD)</comment>
                                 <sort_order>6</sort_order>
