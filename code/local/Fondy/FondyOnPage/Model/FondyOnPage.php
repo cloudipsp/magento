@@ -62,7 +62,7 @@ class Fondy_FondyOnPage_Model_FondyOnPage extends Mage_Payment_Model_Method_Abst
         foreach ($items as $i) {
             $price = $i->getRowTotalInclTax();
             $quantity_second_merchant = Mage::getResourceModel('catalog/product')->getAttributeRawValue($i->getProductId(), 'ВНаличииMerchant');
-            if(empty($quantity) or $quantity == ''){
+            if(empty($quantity_second_merchant) or $quantity_second_merchant == ''){
                 $attr = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('frontend_label', 'ВНаличииMerchant');
                 $attribute_code = $attr->getData('attribute_code')[0]['attribute_code'];
                 $quantity_second_merchant = Mage::getResourceModel('catalog/product')->getAttributeRawValue($i->getProductId(), $attribute_code);
