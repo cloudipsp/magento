@@ -72,6 +72,8 @@ class Fondy_Fondy_Block_Response extends Mage_Core_Block_Abstract
 
                 $invoice = Mage::getModel('sales/Service_Order', $order)->prepareInvoice();
                 $invoice->register()->pay();
+				$invoice->getOrder()->setIsInProcess(true);
+				$invoice->sendEmail(true, '');
                 $transactionSave = Mage::getModel('core/resource_transaction')->addObject(
                     $invoice
                 )->addObject(
@@ -83,8 +85,8 @@ class Fondy_Fondy_Block_Response extends Mage_Core_Block_Abstract
                     ->setCurrencyCode($order->getBaseCurrencyCode())
                     ->setPreparedMessage('Gateway has authorized the payment.')
                     ->setIsTransactionClosed(0);
-                $order->sendNewOrderEmail();
-				
+					
+                $order->sendNewOrderEmail();				
                 $order->setEmailSent(true);
                 $order->save();
 

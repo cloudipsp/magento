@@ -70,6 +70,8 @@ class Fondy_FondyOnPage_Block_Response extends Mage_Core_Block_Abstract
 
                 $invoice = Mage::getModel('sales/Service_Order', $order)->prepareInvoice();
                 $invoice->register()->pay();
+				$invoice->getOrder()->setIsInProcess(true);
+				$invoice->sendEmail(true, '');
                 $transactionSave = Mage::getModel('core/resource_transaction')->addObject(
                     $invoice
                 )->addObject(
