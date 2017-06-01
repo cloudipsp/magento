@@ -45,7 +45,7 @@ class Fondy_FondyOnPage_Block_Response extends Mage_Core_Block_Abstract
                 //update merchant
                 $items = $order->getAllVisibleItems();
                 foreach ($items as $i) {
-                    $quantity_second_merchant = Mage::getResourceModel('catalog/product')->getAttributeRawValue($i->getProductId(), 'ВНаличииMerchant');
+                    $quantity_second_merchant = Mage::getResourceModel('catalog/product')->getAttributeRawValue($i->getProductId(), 'merchant_qty');
                     if(empty($quantity_second_merchant) or $quantity_second_merchant == ''){
                         $attr = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('frontend_label', 'ВНаличииMerchant');
                         $attribute_code = $attr->getData('attribute_code')[0]['attribute_code'];
@@ -61,7 +61,7 @@ class Fondy_FondyOnPage_Block_Response extends Mage_Core_Block_Abstract
                         Mage::getSingleton('catalog/product_action')
                             ->updateAttributes(array(
                                 $i->getProductId()),
-                                array('ВНаличииMerchant' => $new_quantity_second_merchant),
+                                array('merchant_qty' => $new_quantity_second_merchant),
                                 0); //setting new attr value
                         //Mage::throwException();
 
