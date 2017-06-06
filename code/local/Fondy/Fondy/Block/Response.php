@@ -45,31 +45,32 @@ class Fondy_Fondy_Block_Response extends Mage_Core_Block_Abstract
                 }
 
                 //update merchant
-                $items = $order->getAllVisibleItems();
+                $items = $order->getAllItems();
                 foreach ($items as $i) {
-                    $quantity_second_merchant = Mage::getResourceModel('catalog/product')->getAttributeRawValue($i->getProductId(), 'merchant_qty');
-                    if(empty($quantity_second_merchant) or $quantity_second_merchant == ''){
-                        $attr = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('frontend_label', 'ВНаличииMerchant');
-                        $attribute_code = $attr->getData('attribute_code')[0]['attribute_code'];
-                        $quantity_second_merchant = Mage::getResourceModel('catalog/product')->getAttributeRawValue($i->getProductId(), $attribute_code);
-                    }
+                    $quantity_second_merchant = Mage::getResourceModel('catalog/product')->getAttributeRawValue($i->getProductId(), 'merchant_qty');				
+					if ($i->product_type != 'configurable') {										
+						if(empty($quantity_second_merchant) or $quantity_second_merchant == ''){
+							$attr = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('frontend_label', 'ВНаличииMerchant');
+							$attribute_code = $attr->getData('attribute_code')[0]['attribute_code'];
+							$quantity_second_merchant = Mage::getResourceModel('catalog/product')->getAttributeRawValue($i->getProductId(), $attribute_code);
+						}
 
-                    // second merchant id
-                    if (isset($quantity_second_merchant) and $quantity_second_merchant > 0) {
+						// second merchant id
+						if (isset($quantity_second_merchant) and $quantity_second_merchant > 0) {
 
-                        $new_quantity_second_merchant = $quantity_second_merchant - $i->getQtyOrdered(); //calculate new quantity
-                        if ($new_quantity_second_merchant < 0)
-                            $new_quantity_second_merchant = 0; //set zero if $new_quantity_second_merchant < 0
-                        Mage::getSingleton('catalog/product_action')
-                            ->updateAttributes(array(
-                                $i->getProductId()),
-                                array('merchant_qty' => $new_quantity_second_merchant),
-                                0); //setting new attr value
-                        //Mage::throwException();
+							$new_quantity_second_merchant = $quantity_second_merchant - $i->getQtyOrdered(); //calculate new quantity
+							if ($new_quantity_second_merchant < 0)
+								$new_quantity_second_merchant = 0; //set zero if $new_quantity_second_merchant < 0
+							Mage::getSingleton('catalog/product_action')
+								->updateAttributes(array(
+									$i->getProductId()),
+									array('merchant_qty' => $new_quantity_second_merchant),
+									0); //setting new attr value
+							//Mage::throwException();
 
-                    }
-                }
-
+						}
+					}
+                }			
                 $invoice = Mage::getModel('sales/Service_Order', $order)->prepareInvoice();
                 $invoice->register()->pay();
 				$invoice->getOrder()->setIsInProcess(true);
@@ -91,12 +92,12 @@ class Fondy_Fondy_Block_Response extends Mage_Core_Block_Abstract
                 $order->save();
 
                 Mage::getSingleton('checkout/session')->unsQuoteId();
-
+				Mage::getSingleton('checkout/cart')->truncate()->save();
                 $url = Mage::getUrl('checkout/onepage/success', array('_secure' => true));
                 Mage::app()->getFrontController()->getResponse()->setRedirect($url);
             } else {
                 // case all is valid but order is not approved
-                $url = Mage::getUrl('checkout/onepage/error', array('_secure' => true));
+                $url = Mage::getUrl('checkout/onepage/failure', array('_secure' => true));
                 Mage::app()->getFrontController()->getResponse()->setRedirect($url);
             }
         } catch (Exception $e) {

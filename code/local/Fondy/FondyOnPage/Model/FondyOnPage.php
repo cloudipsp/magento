@@ -57,29 +57,31 @@ class Fondy_FondyOnPage_Model_FondyOnPage extends Mage_Payment_Model_Method_Abst
             'sender_email' => $email
         );
         // add merchant info by product
-        $items = $order->getAllVisibleItems();
+        $items = $order->getAllItems();
         $second_price = 0;
         foreach ($items as $i) {
-            $price = $i->getRowTotalInclTax();
-            $quantity_second_merchant = Mage::getResourceModel('catalog/product')->getAttributeRawValue($i->getProductId(), 'merchant_qty');
-            if(empty($quantity_second_merchant) or $quantity_second_merchant == ''){
-                $attr = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('frontend_label', 'ВНаличииMerchant');
-                $attribute_code = $attr->getData('attribute_code')[0]['attribute_code'];
-                $quantity_second_merchant = Mage::getResourceModel('catalog/product')->getAttributeRawValue($i->getProductId(), $attribute_code);
-            }
-
-            // second merchant id
-            $new_price = round($price * 100);
-            if (isset($quantity_second_merchant) and $quantity_second_merchant > 0) {
-                $second_price += $new_price;
-                $data['receiver'] = [
-                    "requisites" => array(
-                        "amount" => $second_price,
-                        "merchant_id" => $this->getConfigData('merchant_second')
-                    ),
-                    "type" => "merchant"];
-            }
-        }
+			if ($i->product_type != 'configurable') {							
+				$quantity_second_merchant = Mage::getResourceModel('catalog/product')->getAttributeRawValue($i->getProductId(), 'merchant_qty');
+				$price = $i->getProduct()->getFinalPrice() * $i->getQtyOrdered();		
+				if(empty($quantity_second_merchant) or $quantity_second_merchant == ''){
+					$attr = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('frontend_label', 'ВНаличииMerchant');
+					$attribute_code = $attr->getData('attribute_code')[0]['attribute_code'];
+					$quantity_second_merchant = Mage::getResourceModel('catalog/product')->getAttributeRawValue($i->getProductId(), $attribute_code);
+				}
+				
+				// second merchant id
+				$new_price = round($price * 100);
+				if (isset($quantity_second_merchant) and $quantity_second_merchant > 0) {
+					$second_price += $new_price;
+					$data['receiver'] = [
+						"requisites" => array(
+							"amount" => $second_price,
+							"merchant_id" => $this->getConfigData('merchant_second')
+						),
+						"type" => "merchant"];
+				}
+			}
+		}
         $fields = [
             "version" => "2.0",
             "data" => base64_encode(json_encode(array('order' => $data))),
