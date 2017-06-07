@@ -5,7 +5,8 @@ class Fondy_FondyOnPage_Block_Response extends Mage_Core_Block_Abstract
 
     protected function _toHtml()
     {
-
+		$url = Mage::getUrl('checkout/onepage/success', array('_secure' => true));
+        Mage::app()->getFrontController()->getResponse()->setRedirect($url);
         include_once "Fondy.cls.php";
         $fodny = Mage::getModel('FondyOnPage/FondyOnPage');
 
