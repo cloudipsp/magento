@@ -4,7 +4,6 @@ $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
 $order->loadByIncrementId($orderId);
 $oplata = Mage::getModel('FondyOnPage/FondyOnPage');
 $data = $oplata->getFormFields();
-
 ?>
 <script src="https://api.fondy.eu/static_common/v1/checkout/ipsp.js"></script>
 <style>
@@ -62,6 +61,7 @@ $data = $oplata->getFormFields();
 </style>
 <div id="checkout">
     <div id="checkout_wrapper">
+	<?php if ($data['error'] == true){echo $data['message'];}?>
     </div>
 </div>
 
@@ -99,7 +99,7 @@ $data = $oplata->getFormFields();
         ".pages-checkout" : {
             "color" : "#FFFFFF!important"
         },
-        <?php echo $data[fields][styles]?>
+        <?php echo $data['styles']?>
     };
     function checkoutInit(url, val) {
         $ipsp("checkout").scope(function() {
@@ -121,22 +121,5 @@ $data = $oplata->getFormFields();
             this.loadUrl(url);
         });
     };
-    var button = $ipsp.get("button");
-    button.setMerchantId(<?php echo $data[fields][merchant_id]?>);
-    button.setAmount(<?php echo $data[fields][amount]?>, "<?php echo $data[fields][currency]?>", true);
-    button.setHost("api.fondy.eu");
-    button.addParam("order_desc","<?php echo $data[fields][order_desc]?>");
-    button.addParam("order_id","<?php echo $data[fields][order_id]?>");
-    button.addParam("lang","<?php echo $data[fields][lang]?>");//button.addParam("delayed","N");
-    button.addParam("server_callback_url","<?php echo $data[fields][response_url]?>");
-    button.addParam("signature","<?php echo $data[fields][signature]?>");
-    button.addParam("sender_email","<?php echo $data[fields][sender_email]?>");
-    button.setResponseUrl("<?php echo $data[fields][response_url]?>");
-    button.addField({
-        label: 'Описание покупки',
-        name: 'order_desc',
-        value: '<?php echo $this->__('Order pay');?> № <?php echo $orderId?>',
-        readonly:true
-    });
-    checkoutInit(button.getUrl());
+    checkoutInit('<?php echo $data['url']?>');
 </script>

@@ -47,7 +47,5 @@ class FondyForm
             Mage::throwException('An error has occurred during payment. Signature is not valid.');
         }
 		return true;
-
-
+	}	
 }
-
