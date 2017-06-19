@@ -4,9 +4,7 @@ class Fondy_Fondy_Block_Response extends Mage_Core_Block_Abstract
 {
 
     protected function _toHtml()
-    {
-		$url = Mage::getUrl('checkout/onepage/success', array('_secure' => true));
-        Mage::app()->getFrontController()->getResponse()->setRedirect($url);
+    {		
         include_once "Fondy.cls.php";
         $fodny = Mage::getModel('Fondy/Fondy');
 
@@ -27,7 +25,8 @@ class Fondy_Fondy_Block_Response extends Mage_Core_Block_Abstract
             $validated = FondyForm::isPaymentValid($settings, $post);
 	
             if ($validated === true) {
-
+				$url = Mage::getUrl('checkout/onepage/success', array('_secure' => true));
+				Mage::app()->getFrontController()->getResponse()->setRedirect($url);
 				$oid = json_decode(base64_decode( $post['data']),TRUE)['order']['order_id'];
 				$payment = json_decode(base64_decode( $post['data']),TRUE)['order'];
                 list($orderId,) = explode(FondyForm::ORDER_SEPARATOR, $oid);
