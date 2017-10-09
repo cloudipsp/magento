@@ -5,10 +5,11 @@ class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
 
     protected $_code = 'Fondy';
     protected $_formBlockType = 'Fondy/form';
-
+	protected $_infoBlockType = 'Fondy/form';
     public function getCheckout()
     {
         return Mage::getSingleton('checkout/session');
+
     }
 
     public function getOrderPlaceRedirectUrl()
@@ -35,11 +36,10 @@ class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
         $email = $customer->getEmail();
         $email = isset($email) ? $email : $quote->getBillingAddress()->getEmail();
         $email = isset($email) ? $email : $order->getCustomerEmail();
-		
         $fields = array(
             'order_id' => $order_id . FondyForm::ORDER_SEPARATOR . time(),
             'merchant_id' => $this->getConfigData('merchant'),
-            'order_desc' => Mage::helper('sales')->__('Order #') . $order_id,
+            'order_desc' => 'Order number'.$order_id,
             'amount' => $amount,
             'currency' => $this->getConfigData('currency'),
             'server_callback_url' => $this->getConfigData('back_ref'),
@@ -59,6 +59,7 @@ class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
 
     function getButton()
     {
+		
         $button = "<div style='position:absolute; top:50%; left:50%; margin:-40px 0px 0px -60px; '>" .
             #"<div><img src='http://www.payu.ua/sites/default/files/logo-payu.png' width='120px' style='margin:5px 5px;'></div>".
             "</div>" .

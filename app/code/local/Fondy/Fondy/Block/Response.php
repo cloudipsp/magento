@@ -27,7 +27,13 @@ class Fondy_Fondy_Block_Response extends Mage_Core_Block_Abstract
             'merchant_id' => $fodny->getConfigData('merchant'),
             'secret_key' => $fodny->getConfigData('secret_key')
         );
-
+		if (empty($_POST)) {
+                $callback = json_decode(file_get_contents("php://input"));
+                $_POST = array();
+                foreach ($callback as $key => $val) {
+                    $_POST[$key] = $val;
+                }
+        }
         try {
             $validated = FondyForm::isPaymentValid($settings, $_POST);
             if ($validated === true) {
@@ -37,13 +43,28 @@ class Fondy_Fondy_Block_Response extends Mage_Core_Block_Abstract
                 $order = Mage::getModel('sales/order');
                 $order->loadByIncrementId($orderId);
 				if ($fodny->getConfigData('after_pay_status') == Mage_Sales_Model_Order::STATE_PROCESSING){
-					$order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment.');
+					$order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment.'  .  ' order ID = ' . $_POST['order_id']);
 				}elseif($fodny->getConfigData('after_pay_status') == Mage_Sales_Model_Order::STATE_HOLDED){
-					$order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment.');
+					$order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment.' .  ' order ID = ' . $_POST['order_id']);
 				}
 				else{
-					$order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true, 'Gateway has authorized the payment.');
+					$order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true, 'Gateway has authorized the payment.' .  ' order ID = ' . $_POST['order_id']);
 				}
+				$invoice = Mage::getModel('sales/Service_Order', $order)->prepareInvoice();
+                $invoice->register()->pay();
+				$invoice->getOrder()->setIsInProcess(true);
+				$invoice->sendEmail(false, '');
+                $transactionSave = Mage::getModel('core/resource_transaction')->addObject(
+                    $invoice
+                )->addObject(
+                    $invoice->getOrder()
+                );
+                $transactionSave->save();
+                $payment = $order->getPayment();
+                $payment->setTransactionId('fondy'. $_POST['order_id'])
+                    ->setCurrencyCode($order->getBaseCurrencyCode())
+                    ->setPreparedMessage('Gateway has authorized the payment.')
+                    ->setIsTransactionClosed(0);
                 $order->sendNewOrderEmail();
                 $order->setEmailSent(true);
 

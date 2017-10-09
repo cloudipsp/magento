@@ -7,7 +7,7 @@ class FondyForm
     const SIGNATURE_SEPARATOR = '|';
     const ORDER_APPROVED = 'approved';
     const ORDER_DECLINED = 'declined';
-	const URL = "https://api.fondy.eu/api/checkout/redirect/";
+
     public static function getSignature($data, $password, $encoded = true)
     {
         $data = array_filter($data, function($var) {
@@ -26,14 +26,15 @@ class FondyForm
     }
     public static function isPaymentValid($oplataSettings, $response)
     {
+
         if ($oplataSettings['merchant_id'] != $response['merchant_id']) {
-            Mage::throwException('An error has occurred during payment. Merchant data is incorrect.');
+            return 'An error has occurred during payment. Merchant data is incorrect.';
         }
         if ($response['order_status'] == FondyForm::ORDER_DECLINED) {
             Mage::throwException('An error has occurred during payment. Order is declined.');
         }
 		if ($response['order_status'] != FondyForm::ORDER_APPROVED) {
-            return false;
+            Mage::throwException('An error has occurred during payment. Order is not approv.');
         }
 			$responseSignature = $response['signature'];
 		if (isset($response['response_signature_string'])){
@@ -46,5 +47,7 @@ class FondyForm
             Mage::throwException('An error has occurred during payment. Signature is not valid.');
         }
 		return true;
-	}
+
+
 }
+

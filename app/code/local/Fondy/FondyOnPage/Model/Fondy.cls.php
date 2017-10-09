@@ -26,17 +26,14 @@ class FondyForm
     }
     public static function isPaymentValid($oplataSettings, $response)
     {
-
-        if ($oplataSettings['merchant_id'] != $response['merchant_id']) {
+        if ($oplataSettings['merchant'] != $response['merchant_id']) {
             return 'An error has occurred during payment. Merchant data is incorrect.';
         }
         if ($response['order_status'] == FondyForm::ORDER_DECLINED) {
             Mage::throwException('An error has occurred during payment. Order is declined.');
         }
-		if ($response['order_status'] != FondyForm::ORDER_APPROVED) {
-            Mage::throwException('An error has occurred during payment. Order is not approv.');
-        }
-			$responseSignature = $response['signature'];
+		
+		$responseSignature = $response['signature'];
 		if (isset($response['response_signature_string'])){
 			unset($response['response_signature_string']);
 		}
@@ -44,8 +41,9 @@ class FondyForm
 			unset($response['signature']);
 		}
 		if (self::getSignature($response, $oplataSettings['secret_key']) != $responseSignature) {
-            Mage::throwException('An error has occurred during payment. Signature is not valid.');
+            return 'An error has occurred during payment. Signature is not valid.';
         }
-		return true;
-	}	
+        return true;
+    }
+
 }

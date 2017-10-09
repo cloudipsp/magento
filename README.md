@@ -16,6 +16,8 @@ Copy all files to `{site root directory}/app/`
 
 >5. Enable module
 
+>extract skin folder in your {theme name} directory
+
 >N.B.! Available statuses after order completion are Processing, On Hold 
 
 #RU
