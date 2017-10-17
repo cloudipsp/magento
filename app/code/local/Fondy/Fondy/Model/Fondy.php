@@ -5,7 +5,7 @@ class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
 
     protected $_code = 'Fondy';
     protected $_formBlockType = 'Fondy/form';
-	protected $_infoBlockType = 'Fondy/form';
+	protected $_infoBlockType = 'Fondy/info';
     public function getCheckout()
     {
         return Mage::getSingleton('checkout/session');
