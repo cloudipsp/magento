@@ -7,7 +7,6 @@ class FondyForm
     const SIGNATURE_SEPARATOR = '|';
     const ORDER_APPROVED = 'approved';
     const ORDER_DECLINED = 'declined';
-
     public static function getSignature($data, $password, $encoded = true)
     {
         $data = array_filter($data, function($var) {
@@ -45,5 +44,4 @@ class FondyForm
         }
         return true;
     }
-
 }

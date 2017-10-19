@@ -4,19 +4,16 @@ $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
 $order->loadByIncrementId($orderId);
 $oplata = Mage::getModel('FondyOnPage/FondyOnPage');
 $data = $oplata->getFormFields();
-
-?><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-
+?>
 <script src="https://api.fondy.eu/static_common/v1/checkout/ipsp.js"></script>
-
 <style>
     .col3-layout .col-wrapper .col-main {
          width: 100%;
     }
- #checkout_message{
-     font-size: 14px;
-     color: red;
- }
+	#checkout_message{
+		 font-size: 14px;
+		 color: red;
+	}
     #checkout_mess {
         font-size: 25px;
         color: red;
@@ -63,155 +60,64 @@ $data = $oplata->getFormFields();
     }
 </style>
 <div id="checkout">
-
     <div id="checkout_wrapper">
+	<?php if ($data['error'] == true){echo $data['message']; die;}?>
     </div>
 </div>
 
 <script>
     var checkoutStyles = {
-
         "html , body" : {
             "overflow" : "hidden",
             "height" : "auto"
         },
-    ".pages-checkout .page-section-overview .order-amount .txt-amount" : {
+		".pages-checkout .page-section-overview .order-amount .txt-amount" : {
             "font-size" : "14px"
         },
-  ".pages-checkout .page-section-overview .order-currency" : {
+		".pages-checkout .page-section-overview .order-currency" : {
             "font-size" : "85%"
         },
-
         ".page-pne .infobox" :{
             "border" : "solid #c03030 1px"
         },
-
         ".pages-checkout .page-section-content" : {
             "background" : "#FFFFFF"
-        },
-        ".pages-checkout .page-section-tabs .nav-tabs li.active > a" : {
-            "background" : "#F1F1F1"
         },
         ".pages-checkout .page-section-overview" : {
             "background" : "white",
             "color" : "black"
-
         },
         ".pages-checkout .page-section-shopinfo" : {
             "background" : "white",
             "display":"none"
-
         },
-        ".pages-checkout .page-section-tabs" : {
-            "background" : "#f0f0f0",
-            "display":"none"
-
-        },
-
         ".row .row-amount" : {
             "color" : "black"
-
-        },
-        ".pages-checkout .page-section-overvie .row-group .row .row-extra" : {
-            'position': 'absolute',
-            'top': '240px',
-             'left': '25px',
-            'z-index': '9999999'
-
         },
         ".pages-checkout" : {
             "color" : "#FFFFFF!important"
-
         },
-        '#submit_button_row' : {
-            'display': 'none'
-        },
-        ".btn-block" : {
-            "background" : "#c03030",
-            "padding" : "0"
-        },
-        <?php echo $data[fields][styles]?>
+        <?php echo $data['styles']?>
     };
-    function __DEFAULTCALLBACK__(data,type){
-        var form;
-        console.log('action',data.action);
-        console.log('url',data.url);
-        for(var prop in data.send_data){
-            if(data.send_data.hasOwnProperty(prop)){
-                console.log(prop,data.send_data[prop]);
-            }
-        }
-        if ( data.error){
-            console.log(data,data.error);
-            return;
-        }
-        if (data.action == 'redirect') {
-            this.loadUrl(data.url);
-            return;
-        }
-        if (data.send_data.order_status == 'delayed') {
-            this.unbind('ready');
-            this.hide();
-            return;
-        } else {
-            this.unbind('ready').action('ready', function() {
-                this.show();
-            });
-        }
-        if( data.send_data && data.url ){
-            form = prepareFormData(data.url,data.send_data);
-            this.find('body').appendChild(form);
-            form.submit();
-            form.parentNode.removeChild(form);
-        }
-    }
     function checkoutInit(url, val) {
         $ipsp("checkout").scope(function() {
             this.setCheckoutWrapper("#checkout_wrapper");
             this.setModal(false);
             this.setCssStyle(checkoutStyles);
             this.width("100%");
-
             this.addCallback(__DEFAULTCALLBACK__);
             this.action("show", function(data) {
-                $("#checkout_loader").remove();
-                $("#checkout").show();
+                jQuery("#checkout_loader").remove();
+                jQuery("#checkout").show();
             });
             this.action("hide", function(data) {
-                $("#checkout").hide();
+                jQuery("#checkout").hide();
             });
-            if(val){
-                this.width(val);
-                this.action("resize", function(data) {
-                    $("#checkout_wrapper").width(val).height(data.height);
-                });
-            }else{
-                this.action("resize", function(data) {
-                    $("#checkout_wrapper").height(data.height+15);
-                });
-            }
+            this.action("resize", function(data) {
+                jQuery("#checkout_wrapper").height(data.height);
+            });         
             this.loadUrl(url);
         });
     };
-    var button = $ipsp.get("button");
-    button.setMerchantId(<?php echo $data[fields][merchant_id]?>);
-    button.setAmount(<?php echo $data[fields][amount]?>, "<?php echo $data[fields][currency]?>", true);
-    button.setHost("api.fondy.eu");
-    button.addParam("order_desc","<?php echo $data[fields][order_desc]?>");
-    button.addParam("order_id","<?php echo $data[fields][order_id]?>");
-    button.addParam("lang","<?php echo $data[fields][lang]?>");//button.addParam("delayed","N");
-    button.addParam("server_callback_url","<?php echo $data[fields][response_url]?>");
-    button.addParam("signature","<?php echo $data[fields][signature]?>");
-    button.addParam("sender_email","<?php echo $data[fields][sender_email]?>");
-    button.setResponseUrl("<?php echo $data[fields][response_url]?>");
-    button.addField({
-        label: 'Описание покупки',
-        name: 'order_desc',
-        value: '<?php echo $this->__('Order pay');?> № <?php echo $orderId?>',
-        readonly:true
-    });
-    checkoutInit(button.getUrl());
+    checkoutInit('<?php echo $data['url']?>');
 </script>
-
-<div id="checkout_button" onclick="$ipsp('checkout').send('submit')"><?php echo $this->__('Pay');?></div>
-<div id="checkout_button_cancel" onclick="document.location.href = '<?php echo Mage::getUrl('', array('_secure' => true))?>';"><?php echo $this->__('Back');?></div>
