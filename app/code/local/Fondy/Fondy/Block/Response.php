@@ -89,6 +89,7 @@ class Fondy_Fondy_Block_Response extends Mage_Core_Block_Abstract
                 }
             }
             $url = Mage::getUrl('checkout/onepage/failure', array('_secure' => true));
+			Mage::Log($e);
             Mage::app()->getFrontController()->getResponse()->setRedirect($url);
         }
     }
