@@ -44,7 +44,7 @@ class Fondy_FondyOnPage_Block_Response extends Mage_Core_Block_Abstract
                 }
 
                 //update merchant
-                 $items = $order->getAllItems();
+                /*$items = $order->getAllItems();
                 foreach ($items as $i) {
                     $quantity_second_merchant = Mage::getResourceModel('catalog/product')->getAttributeRawValue($i->getProductId(), 'merchant_qty', Mage::app()->getStore());				
 					if ($i->product_type != 'configurable') {										
@@ -69,7 +69,7 @@ class Fondy_FondyOnPage_Block_Response extends Mage_Core_Block_Abstract
 
 						}
 					}
-                }			
+                }*/	
                 $invoice = Mage::getModel('sales/Service_Order', $order)->prepareInvoice();
                 $invoice->register()->pay();
 				$invoice->getOrder()->setIsInProcess(true);

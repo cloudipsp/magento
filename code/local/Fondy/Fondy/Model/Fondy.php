@@ -57,7 +57,7 @@ class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
             'sender_email' => $email
 			);
 		// add merchant info by product
-		$items = $order->getAllItems();
+		/*$items = $order->getAllItems();
 		$second_price = 0;
 		foreach ($items as $i) {
 			if ($i->product_type != 'configurable') {							
@@ -81,7 +81,7 @@ class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
 						"type" => "merchant"];
 				}
 			}
-		}
+		}*/
 		$fields = [
 		"version" => "2.0",
 		"data" => base64_encode(json_encode(array('order' => $data))),
