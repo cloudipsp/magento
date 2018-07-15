@@ -20,8 +20,11 @@ Copy all image to `{site root directory}/skin/{template_name}`
 
 
 Callback URL : `http://yoursite/Fondy/response`
+
 Callback URL FondyOnPage : `http://yoursite/FondyOnPage/response`
+
 Callback URL FondyBankWire : `http://yoursite/FondyBankWire/response`
+
 -----
 
 Example of "Fondy on Page" settings:
