@@ -5,7 +5,7 @@ Module for Magento 1.9
 Installation
 ----
 Copy all files to `{site root directory}/app/`
-
+Copy all image to `{site root directory}/skin/{template_name}`
 >1. Login to admin interface
 
 >2. Navigate to menu "System" -> "Configuration" 
@@ -18,26 +18,10 @@ Copy all files to `{site root directory}/app/`
 
 >N.B.! Available statuses after order completion are Processing, On Hold 
 
-#RU
-
-Установка
-----
-Содержимое скопировать в папку `{корень сайта}/app/`
-
->1. Зайти в панель администратора
-
->2. Перейти в раздел "Система" -> "Конфигурация" ( "System" -> "Configuration" )
-
->3. Открыть вкладку "Платежные методы" ( "Payment methods" )
-
->4. Выбрать Fondy или Fondy on Page
-
->5. Включить модуль и ввести все настройки 
-
->!!!!Доступные статусы после завершения заказа: Processing, On Hold 
-
 
 Callback URL : `http://yoursite/Fondy/response`
+Callback URL FondyOnPage : `http://yoursite/FondyOnPage/response`
+Callback URL FondyBankWire : `http://yoursite/FondyBankWire/response`
 -----
 
 Example of "Fondy on Page" settings:
