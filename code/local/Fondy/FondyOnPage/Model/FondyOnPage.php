@@ -50,44 +50,54 @@ class Fondy_FondyOnPage_Model_FondyOnPage extends Mage_Payment_Model_Method_Abst
         );
 
         $fields['signature'] = FondyForm::getSignature($fields, $this->getConfigData('secret_key'));
-        Mage::log('Request: ' . json_encode($fields), null, 'fondy.log', true);
-        $ch = curl_init();
+        Mage::log('Request: ' . json_encode($fields), null, 'fondy.log', false);
         $params = array();
-        curl_setopt($ch, CURLOPT_URL, 'https://api.fondy.eu/api/checkout/url/');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array('request' => $fields)));
-        $result = json_decode(curl_exec($ch));
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        if ($httpcode != 200) {
-            Mage::log('Curl code: ' . $httpcode, null, 'fondy.log', true);
-            $params = array(
-                'error' => 1,
-                'message' => 'Curl error http code not 200, code is: ' . $httpcode
-            );
-            return $params;
-        }
-        if ($result->response->response_status == 'failure') {
-            Mage::log('Response: ' . $result->response->error_message, null, 'fondy.log', true);
-            $params = array(
-                'error' => 1,
-                'message' => $result->response->error_message
-            );
-        } else {
-            if (isset($result->response->checkout_url)) {
-                $params = array(
-                    'url' => $result->response->checkout_url,
-                    'styles' => $this->getConfigData('styles')
-                );
-            } else {
+        try {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://api.fondy.eu/api/checkout/url/');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array('request' => $fields)));
+            $result = json_decode(curl_exec($ch), TRUE);
+            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            if ($httpcode != 200) {
+                Mage::log('Curl code: ' . $httpcode, null, 'fondy.log', true);
                 $params = array(
                     'error' => 1,
-                    'message' => json_encode($result)
+                    'message' => 'Curl error http code not 200, code is: ' . $httpcode
                 );
+                return $params;
             }
-        }
+            if ($result['response']['response_status'] == 'failure') {
+                Mage::log('Response: ' . $result['response']['error_message'], null, 'fondy.log', true);
+                $params = array(
+                    'error' => 1,
+                    'message' => $result['response']['error_message']
+                );
+            } else {
+                if (isset($result['response']['checkout_url'])) {
+                    Mage::log('Result: ' . json_encode($result), null, 'fondy.log', false);
+                    $params = array(
+                        'url' => $result['response']['checkout_url'],
+                        'styles' => $this->getConfigData('styles')
+                    );
+                } else {
+                    Mage::log('Result: ' . json_encode($result), null, 'fondy.log', true);
+                    $params = array(
+                        'error' => 1,
+                        'message' => json_encode($result)
+                    );
+                }
+            }
 
+        } catch (Exception $e) {
+            Mage::log('Error: ' . $e, null, 'fondy.log', true);
+            $params = array(
+                'error' => 1,
+                'message' => 'Undefined Error'
+            );
+        }
         return $params;
     }
 }
