@@ -8,7 +8,7 @@
                         <sort_order>670</sort_order>
                         <show_in_default>1</show_in_default>
                         <show_in_website>1</show_in_website>
-                        <show_in_store>0</show_in_store>
+                        <show_in_store>1</show_in_store>
                         <fields>
                             <active translate="label">
                                 <label>Enabled</label>
@@ -17,7 +17,7 @@
                                 <sort_order>1</sort_order>
                                 <show_in_default>1</show_in_default>
                                 <show_in_website>1</show_in_website>
-                                <show_in_store>0</show_in_store>
+                                <show_in_store>1</show_in_store>
                             </active>
                             <title translate="label">
                                 <label>Name</label>
@@ -25,7 +25,7 @@
                                 <sort_order>2</sort_order>
                                 <show_in_default>1</show_in_default>
                                 <show_in_website>1</show_in_website>
-                                <show_in_store>0</show_in_store>
+                                <show_in_store>1</show_in_store>
                             </title>
                             <order_status translate="label">
                                 <label>New Order Status</label>
@@ -34,7 +34,7 @@
                                 <sort_order>2</sort_order>
                                 <show_in_default>1</show_in_default>
                                 <show_in_website>1</show_in_website>
-                                <show_in_store>0</show_in_store>
+                                <show_in_store>1</show_in_store>
                             </order_status>
                             <after_pay_status translate="label">
                                 <label>After payment status</label>
@@ -43,7 +43,7 @@
                                 <sort_order>3</sort_order>
                                 <show_in_default>1</show_in_default>
                                 <show_in_website>1</show_in_website>
-                                <show_in_store>0</show_in_store>
+                                <show_in_store>1</show_in_store>
                             </after_pay_status>
     <!-- Special configuration -->
                             <merchant translate="label">
@@ -53,7 +53,7 @@
                                 <sort_order>4</sort_order>
                                 <show_in_default>1</show_in_default>
                                 <show_in_website>1</show_in_website>
-                                <show_in_store>0</show_in_store>
+                                <show_in_store>1</show_in_store>
                             </merchant>
 
                             <secret_key translate="label">
@@ -63,7 +63,7 @@
                                 <sort_order>5</sort_order>
                                 <show_in_default>1</show_in_default>
                                 <show_in_website>1</show_in_website>
-                                <show_in_store>0</show_in_store>
+                                <show_in_store>1</show_in_store>
                             </secret_key>
 
                             <currency translate="label">
@@ -83,7 +83,7 @@
                                 <sort_order>7</sort_order>
                                 <show_in_default>1</show_in_default>
                                 <show_in_website>1</show_in_website>
-                                <show_in_store>0</show_in_store>
+                                <show_in_store>1</show_in_store>
                             </back_ref>
 
                             <language translate="label">
@@ -93,8 +93,18 @@
                                 <sort_order>9</sort_order>
                                 <show_in_default>1</show_in_default>
                                 <show_in_website>1</show_in_website>
-                                <show_in_store>0</show_in_store>
+                                <show_in_store>1</show_in_store>
                             </language>
+							<merchants translate="label">
+									<label>Alternative Merchants</label>
+									<frontend_model>Fondy/config_admin</frontend_model>
+									<backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+									<comment>Merchant ID</comment>
+									<sort_order>14</sort_order>
+									<show_in_default>1</show_in_default>
+									<show_in_website>1</show_in_website>
+									<show_in_store>1</show_in_store>
+							</merchants> 
                         </fields>
                     </Fondy>
                 </groups>
