@@ -42,5 +42,5 @@ Callback URL : `http://yoursite/Fondy/response`
 
 Example of "Fondy" settings:
 
-[2]: https://raw.githubusercontent.com/cloudipsp/magento/tree/alternative_merchants/magentor.png
+[2]: https://raw.githubusercontent.com/cloudipsp/magento/alternative_merchants/magentor.png
 ![Скриншот][2]
