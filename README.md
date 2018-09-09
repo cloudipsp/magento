@@ -1,6 +1,6 @@
-Module for Magento 1.9
+## Module for Magento 1.9
 =====
-#EN
+# EN
 
 Installation
 ----
@@ -18,7 +18,7 @@ Copy all files to `{site root directory}/app/`
 
 >N.B.! Available statuses after order completion are Processing, On Hold 
 
-#RU
+# RU
 
 Установка
 ----
@@ -40,12 +40,7 @@ Copy all files to `{site root directory}/app/`
 Callback URL : `http://yoursite/Fondy/response`
 -----
 
-Example of "Fondy on Page" settings:
-
-[1]: https://raw.githubusercontent.com/cloudipsp/magento/master/magentof.png
-![Скриншот][1]
-
 Example of "Fondy" settings:
 
-[2]: https://raw.githubusercontent.com/cloudipsp/magento/master/magentor.png
+[2]: https://raw.githubusercontent.com/cloudipsp/magento/tree/alternative_merchants/magentor.png
 ![Скриншот][2]
