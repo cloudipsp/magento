@@ -83,13 +83,29 @@ class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
         $mid = '';
         $secret = '';
         foreach ($merchants as $data) {
-            if (strpos($data['city_index'], '-') !== false) {
-                foreach (explode('-', $data['city_index']) as $index) {
+            if (strpos($data['city_index'], ',') !== false) {
+                foreach (explode(',', $data['city_index']) as $index) {
+                    if (strpos($index, '-') !== false) {
+                        $range = explode('-', $index);
+                        if ($this->inZipRange($zip, $range[0], $range[1])) {
+                            $mid = $data['merchant_id'];
+                            $secret = $data['secret_key'];
+                            break;
+                        }
+                    }
                     if ($index == $zip) {
                         $mid = $data['merchant_id'];
                         $secret = $data['secret_key'];
                         break;
                     }
+                }
+            }
+            if (strpos($data['city_index'], '-') !== false) {
+                $range = explode('-', $data['city_index']);
+                if ($this->inZipRange($zip, $range[0], $range[1])) {
+                    $mid = $data['merchant_id'];
+                    $secret = $data['secret_key'];
+                    break;
                 }
             }
             if ($data['city_index'] == $zip) {
@@ -109,6 +125,11 @@ class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
             'merchant_id' => $mid,
             'secret_key' => $secret
         );
+    }
+
+    private function inZipRange($val, $min, $max)
+    {
+        return ($val >= $min && $val <= $max);
     }
 }
 

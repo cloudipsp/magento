@@ -31,7 +31,7 @@ class Fondy_Fondy_Block_Response extends Mage_Core_Block_Abstract
             //Try to get merchant by zip
             $zipCode = $order->getShippingAddress()->getPostcode();
             $settings = $fondy->getMerchantByZip($zipCode, unserialize($fondy->getConfigData('merchants')));
-           
+
             $validated = FondyForm::isPaymentValid($settings, $data);
             if ($validated === true) {
                 // Payment was successful, so update the order's state, send order email and move to the success page
