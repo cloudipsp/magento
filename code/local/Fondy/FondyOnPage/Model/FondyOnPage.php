@@ -31,20 +31,23 @@ class Fondy_FondyOnPage_Model_FondyOnPage extends Mage_Payment_Model_Method_Abst
         $amount = round($order->getGrandTotal() * 100);
 
         $customer = Mage::getSingleton('customer/session')->getCustomer();
-        $checkout = Mage::getSingleton('checkout/session')->getCustomer();
         $quote = Mage::getSingleton('checkout/session')->getQuote();
+
         $email = $customer->getEmail();
         $email = isset($email) ? $email : $quote->getBillingAddress()->getEmail();
         $email = isset($email) ? $email : $order->getCustomerEmail();
-        $back = Mage::getUrl('FondyOnPage/response', array('_secure' => true));
+
+        $callback = Mage::getUrl('FondyOnPage/response', array('_secure' => true));
+        $response_url = $this->getConfigData('back_ref');
+
         $fields = array(
             'order_id' => $order_id . FondyForm::ORDER_SEPARATOR . time(),
             'merchant_id' => $this->getConfigData('merchant'),
             'order_desc' => Mage::helper('sales')->__('Order #') . $order_id,
             'amount' => $amount,
             'currency' => $this->getConfigData('currency'),
-            'server_callback_url' => $back,
-            'response_url' => $back,
+            'server_callback_url' => $callback,
+            'response_url' => !empty($response_url) ? $response_url : Mage::getUrl('checkout/onepage/success', array('_secure' => true)),
             'lang' => $this->getConfigData('language'),
             'sender_email' => $email
         );

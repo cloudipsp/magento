@@ -30,7 +30,6 @@ class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
         $amount = round($order->getGrandTotal() * 100, 2);
 
         $customer = Mage::getSingleton('customer/session')->getCustomer();
-        $checkout = Mage::getSingleton('checkout/session')->getCustomer();
         $quote = Mage::getSingleton('checkout/session')->getQuote();
         $email = $customer->getEmail();
         $email = isset($email) ? $email : $quote->getBillingAddress()->getEmail();

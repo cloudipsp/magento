@@ -76,6 +76,16 @@
                                 <show_in_store>0</show_in_store>
                             </currency>
 
+                            <back_ref translate="label">
+                                <label>Back URL</label>
+                                <frontend_type>text</frontend_type>
+                                <comment>(The page to which the customer will come back after the payment.)</comment>
+                                <sort_order>7</sort_order>
+                                <show_in_default>1</show_in_default>
+                                <show_in_website>1</show_in_website>
+                                <show_in_store>0</show_in_store>
+                            </back_ref>
+
                             <language translate="label">
                                 <label>Language Fondy</label>
                                 <frontend_type>text</frontend_type>
