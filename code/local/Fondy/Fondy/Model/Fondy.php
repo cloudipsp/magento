@@ -36,14 +36,17 @@ class Fondy_Fondy_Model_Fondy extends Mage_Payment_Model_Method_Abstract
         $email = isset($email) ? $email : $quote->getBillingAddress()->getEmail();
         $email = isset($email) ? $email : $order->getCustomerEmail();
 		
+		$callback_url = Mage::getUrl('Fondy/response', array('_secure' => true));
+        $response_url = $this->getConfigData('back_ref');
+		
         $fields = array(
             'order_id' => $order_id . FondyForm::ORDER_SEPARATOR . time(),
             'merchant_id' => $this->getConfigData('merchant'),
             'order_desc' => Mage::helper('sales')->__('Order #') . $order_id,
             'amount' => $amount,
             'currency' => $this->getConfigData('currency'),
-            'server_callback_url' => $this->getConfigData('back_ref'),
-            'response_url' => $this->getConfigData('back_ref'),
+            'server_callback_url' => $callback_url,
+            'response_url' => !empty($response_url) ? $response_url : Mage::getUrl('checkout/onepage/success', array('_secure' => true)),
             'lang' => $this->getConfigData('language'),
             'sender_email' => $email
         );
