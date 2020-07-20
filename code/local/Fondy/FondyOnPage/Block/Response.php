@@ -49,8 +49,9 @@ class Fondy_FondyOnPage_Block_Response extends Mage_Core_Block_Abstract
 
                 Mage::getSingleton('checkout/session')->unsQuoteId();
 
-                $url = Mage::getUrl('checkout/onepage/success', array('_secure' => true));
-                Mage::app()->getFrontController()->getResponse()->setRedirect($url);
+                // $url = Mage::getUrl('checkout/onepage/success', array('_secure' => true));
+                // Mage::app()->getFrontController()->getResponse()->setRedirect($url);
+                exit('OK');
             } else {
                 // case all is valid but order is not approved
                 $url = Mage::getUrl('checkout/onepage/error', array('_secure' => true));
