@@ -46,7 +46,8 @@ class Fondy_FondyOnPage_Block_Response extends Mage_Core_Block_Abstract
                 }
 
                 Mage::getSingleton('checkout/session')->unsQuoteId();
-                if (!isset($_GET['callback'])) {
+                $isRedirect = Mage::app()->getRequest()->getParam('callback');
+                if (!isset($isRedirect)) {
                     $url = Mage::getUrl('checkout/onepage/success', array('_secure' => true));
                     Mage::app()->getFrontController()->getResponse()->setRedirect($url);
                 } else {
