@@ -37,7 +37,7 @@ class Fondy_FondyOnPage_Model_FondyOnPage extends Mage_Payment_Model_Method_Abst
         $email = isset($email) ? $email : $quote->getBillingAddress()->getEmail();
         $email = isset($email) ? $email : $order->getCustomerEmail();
 
-        $callback = Mage::getUrl('FondyOnPage/response', array('_secure' => true));
+        $callback = Mage::getUrl('FondyOnPage/response', array('_secure' => true, '_query' => 'callback=1'));
         $response_url = $this->getConfigData('back_ref');
 
         $fields = array(

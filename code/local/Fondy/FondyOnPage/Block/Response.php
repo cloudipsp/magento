@@ -13,48 +13,48 @@ class Fondy_FondyOnPage_Block_Response extends Mage_Core_Block_Abstract
             'merchant_id' => $fodny->getConfigData('merchant'),
             'secret_key' => $fodny->getConfigData('secret_key')
         );
-		
-		if (empty($_POST)) {
-                $callback = json_decode(file_get_contents("php://input"));
-                $_POST = array();
-                foreach ($callback as $key => $val) {
-                    $_POST[$key] = $val;
-                }
+
+        if (empty($_POST)) {
+            $callback = json_decode(file_get_contents("php://input"));
+            $_POST = array();
+            foreach ($callback as $key => $val) {
+                $_POST[$key] = $val;
+            }
         }
-		
+
         try {
             $validated = FondyForm::isPaymentValid($settings, $_POST);
 
             if ($validated === true) {
-            //if ($_POST[])
-
                 list($orderId,) = explode(FondyForm::ORDER_SEPARATOR, $_POST['order_id']);
 
                 // Payment was successful, so update the order's state, send order email and move to the success page
                 $order = Mage::getModel('sales/order');
                 $order->loadByIncrementId($orderId);
-                if ($fodny->getConfigData('after_pay_status') == Mage_Sales_Model_Order::STATE_PROCESSING){
-                    $order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment. ' . $_POST['order_id']);
-                }elseif($fodny->getConfigData('after_pay_status') == Mage_Sales_Model_Order::STATE_HOLDED){
-                    $order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment. ' . $_POST['order_id']);
+                if ($order->getStatus() == $fodny->getConfigData('order_status') or
+                    $order->getStatus() == 'pending') {
+                    if ($fodny->getConfigData('after_pay_status') == Mage_Sales_Model_Order::STATE_PROCESSING) {
+                        $order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment. ID: ' . $_POST['order_id']);
+                    } elseif ($fodny->getConfigData('after_pay_status') == Mage_Sales_Model_Order::STATE_HOLDED) {
+                        $order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment. ID: ' . $_POST['order_id']);
+                    } else {
+                        $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true, 'Gateway has authorized the payment. ID: ' . $_POST['order_id']);
+                    }
+                    $order->sendNewOrderEmail();
+                    $order->setEmailSent(true);
+                    $order->save();
                 }
-                else{
-                    $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true, 'Gateway has authorized the payment. ' . $_POST['order_id']);
-                }
-
-                $order->sendNewOrderEmail();
-                $order->setEmailSent(true);
-
-                $order->save();
 
                 Mage::getSingleton('checkout/session')->unsQuoteId();
-
-                // $url = Mage::getUrl('checkout/onepage/success', array('_secure' => true));
-                // Mage::app()->getFrontController()->getResponse()->setRedirect($url);
-                exit('OK');
+                if (!isset($_GET['callback'])) {
+                    $url = Mage::getUrl('checkout/onepage/success', array('_secure' => true));
+                    Mage::app()->getFrontController()->getResponse()->setRedirect($url);
+                } else {
+                    Mage::app()->getFrontController()->getResponse()->setBody(Mage::helper('core')->jsonEncode('ok'))->sendResponse();
+                }
             } else {
                 // case all is valid but order is not approved
-                $url = Mage::getUrl('checkout/onepage/error', array('_secure' => true));
+                $url = Mage::getUrl('checkout/onepage/failure', array('_secure' => true));
                 Mage::app()->getFrontController()->getResponse()->setRedirect($url);
             }
         } catch (Exception $e) {

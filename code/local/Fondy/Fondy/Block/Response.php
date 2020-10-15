@@ -36,27 +36,32 @@ class Fondy_Fondy_Block_Response extends Mage_Core_Block_Abstract
                 // Payment was successful, so update the order's state, send order email and move to the success page
                 $order = Mage::getModel('sales/order');
                 $order->loadByIncrementId($orderId);
-				if ($fodny->getConfigData('after_pay_status') == Mage_Sales_Model_Order::STATE_PROCESSING){
-					$order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment.');
-				}elseif($fodny->getConfigData('after_pay_status') == Mage_Sales_Model_Order::STATE_HOLDED){
-					$order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment.');
-				}
-				else{
-					$order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true, 'Gateway has authorized the payment.');
-				}
-                $order->sendNewOrderEmail();
-                $order->setEmailSent(true);
+                if ($order->getStatus() == $fodny->getConfigData('order_status') or
+                    $order->getStatus() == 'pending') {
+                    if ($fodny->getConfigData('after_pay_status') == Mage_Sales_Model_Order::STATE_PROCESSING) {
+                        $order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment. ID: ' . $_POST['order_id']);
+                    } elseif ($fodny->getConfigData('after_pay_status') == Mage_Sales_Model_Order::STATE_HOLDED) {
+                        $order->setState($fodny->getConfigData('after_pay_status'), true, 'Gateway has authorized the payment. ID: ' . $_POST['order_id']);
+                    } else {
+                        $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true, 'Gateway has authorized the payment. ID: ' . $_POST['order_id']);
+                    }
+                    $order->sendNewOrderEmail();
+                    $order->setEmailSent(true);
 
-                $order->save();
+                    $order->save();
+                }
 
                 Mage::getSingleton('checkout/session')->unsQuoteId();
+                if (!isset($_GET['callback'])) {
+                    $url = Mage::getUrl('checkout/onepage/success', array('_secure' => true));
+                    Mage::app()->getFrontController()->getResponse()->setRedirect($url);
+                } else {
+                    Mage::app()->getFrontController()->getResponse()->setBody(Mage::helper('core')->jsonEncode('ok'))->sendResponse();
+                }
 
-                // $url = Mage::getUrl('checkout/onepage/success', array('_secure' => true));
-                // Mage::app()->getFrontController()->getResponse()->setRedirect($url);
-                exit('OK');
             } else {
                 // case all is valid but order is not approved
-                $url = Mage::getUrl('checkout/onepage/success', array('_secure' => true));
+                $url = Mage::getUrl('checkout/onepage/failure', array('_secure' => true));
                 Mage::app()->getFrontController()->getResponse()->setRedirect($url);
             }
         } catch (Exception $e) {
